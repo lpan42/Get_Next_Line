@@ -26,7 +26,8 @@ static int		check_new_line(char **str, char **line)
 		i++;
 	}
 	temp[i] = '\0';
-	*line = ft_strndup(*str, i);
+	if (!(*line = ft_strndup(*str, i)))
+		return (-1);
 	*str = NULL;
 	free(temp);
 	return (1);
@@ -43,11 +44,12 @@ static int		read_file(const int fd, char *buff, char **str, char **line)
 		if (*str)
 		{
 			temp = *str;
-			*str = ft_strjoin(temp, buff);
+			if (!(*str = ft_strjoin(temp, buff)))
+				return (-1);
 			free(temp);
 		}
-		else
-			*str = ft_strdup(buff);
+		else if (!(*str = ft_strdup(buff)))
+			return (-1);
 		if (check_new_line(str, line))
 			return (1);
 	}
