@@ -28,7 +28,8 @@ static int		check_new_line(char **str, char **line)
 	temp[i] = '\0';
 	if (!(*line = ft_strndup(*str, i)))
 		return (-1);
-	*str = NULL;
+	if (!(*str = ft_strdup(&temp[i + 1])))
+		return (-1);
 	free(temp);
 	return (1);
 }
@@ -65,12 +66,19 @@ int				get_next_line(const int fd, char **line)
 	ret = 0;
 	if (fd < 0 || !(buff = ft_strnew(BUFF_SIZE + 1)))
 		return (-1);
+	if (str[fd])
+	{
+		if(check_new_line(&str[fd], line))
+			return (1);
+	}
 	ret = read_file(fd, buff, &str[fd], line);
 	free(buff);
-	if (!str[fd])
+	if (ret == 1 || !str[fd])
 		return (ret);
-	*line = str[fd];
-	str[fd] = NULL;
-	ret = 1;
+	if (!ret && *line)
+	{
+		*line = str[fd];
+		str[fd] = NULL;
+	}
 	return (ret);
 }
