@@ -76,12 +76,11 @@ int				get_next_line(const int fd, char **line)
 	}
 	ret = read_file(fd, buff, &str[fd], line);
 	if (ret != 0 || str[fd] == NULL || str[fd][0] == '\0')
-	{
-		if (!ret && *line)
-			*line = NULL;
 		return (ret);
+	if (ret == 0 && str[fd])
+	{
+		*line = str[fd];
+		str[fd] = NULL;
 	}
-	*line = str[fd];
-	str[fd] = NULL;
 	return (1);
 }
