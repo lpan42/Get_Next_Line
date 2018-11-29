@@ -67,11 +67,11 @@ int				get_next_line(const int fd, char **line)
 	int				ret;
 
 	ret = 0;
-	if (fd < 0)
+	if (fd < 0 || BUFF_SIZE <= 0)
 		return (-1);
 	if (str[fd])
 	{
-		if(check_new_line(&str[fd], line))
+		if (check_new_line(&str[fd], line))
 			return (1);
 	}
 	ret = read_file(fd, buff, &str[fd], line);
