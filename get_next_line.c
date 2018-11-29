@@ -25,12 +25,11 @@ static int		check_new_line(char **str, char **line)
 			return (0);
 		i++;
 	}
-	temp[i] = '\0';
 	if (!(*line = ft_strndup(*str, i)))
 		return (-1);
 	if (!(*str = ft_strdup(&temp[i + 1])))
 		return (-1);
-	free(temp);
+	ft_strdel(&temp);
 	return (1);
 }
 
@@ -42,15 +41,19 @@ static int		read_file(const int fd, char *buff, char **str, char **line)
 	ret = 0;
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		if (*str)
+		buff[ret] = '\0';
+		if (!*str)
+		{
+			if (!(*str = ft_strdup(buff)))
+				return (-1);
+		}
+		else
 		{
 			temp = *str;
 			if (!(*str = ft_strjoin(temp, buff)))
 				return (-1);
-			free(temp);
+			ft_strdel(&temp);
 		}
-		else if (!(*str = ft_strdup(buff)))
-			return (-1);
 		if (check_new_line(str, line))
 			return (1);
 	}
@@ -60,11 +63,11 @@ static int		read_file(const int fd, char *buff, char **str, char **line)
 int				get_next_line(const int fd, char **line)
 {
 	static char		*str[1024];
-	char			*buff;
+	char			buff[BUFF_SIZE + 1];
 	int				ret;
 
 	ret = 0;
-	if (fd < 0 || !(buff = ft_strnew(BUFF_SIZE + 1)))
+	if (fd < 0)
 		return (-1);
 	if (str[fd])
 	{
@@ -72,13 +75,13 @@ int				get_next_line(const int fd, char **line)
 			return (1);
 	}
 	ret = read_file(fd, buff, &str[fd], line);
-	free(buff);
-	if (ret == 1 || !str[fd])
-		return (ret);
-	if (!ret && *line)
+	if (ret != 0 || str[fd] == NULL || str[fd][0] == '\0')
 	{
-		*line = str[fd];
-		str[fd] = NULL;
+		if (!ret && *line)
+			*line = NULL;
+		return (ret);
 	}
-	return (ret);
+	*line = str[fd];
+	str[fd] = NULL;
+	return (1);
 }

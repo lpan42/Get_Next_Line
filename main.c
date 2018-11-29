@@ -33,21 +33,23 @@
 			printf("[Return: %d] Line #%d: %s\n", ret, ++nol, line);
 			free(line);
 		}
+		printf("[Return: %d] Line #%d: %s\n", ret, ++nol, line);
 		if (ret == -1)
-			printf("-----------\nError\n");
-		else if (ret == 0)
-			printf("-----------\nEnd of file\n");
+			printf("-----------Error\n");
+		//else if (ret == 0)
+		//	printf("-----------End of file\n");
 		close(fd);
-	fd2 = open(argv[2], O_RDONLY);
+	/*fd2 = open(argv[2], O_RDONLY);
 		while ((ret2 = get_next_line(fd2, &line2)) > 0)
 		{
 			printf("[Return: %d] Line #%d: %s\n", ret2, ++nol2, line2);
 			free(line2);
 		}
 		if (ret2 == -1)
-			printf("-----------\nError\n");
+			printf("-----------Error\n");
 		else if (ret2 == 0)
-			printf("-----------\nEnd of file\n");
+			printf("-----------End of file\n");
 		close(fd2);
+		*/
 	return (0);
 }
