@@ -37,29 +37,27 @@ static int		read_file(const int fd, char *buff, char **str, char **line)
 {
 	int				ret;
 	char			*temp;
+	int				result;
 
 	ret = 0;
+	result = 0;
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
-		if (!*str)
-		{
-			if (!(*str = ft_strdup(buff)))
-				return (-1);
-		}
-		else
+		if (*str)
 		{
 			temp = *str;
 			if (!(*str = ft_strjoin(temp, buff)))
 				return (-1);
 			ft_strdel(&temp);
 		}
-		if (check_new_line(str, line))
-			return (1);
+		else if (!(*str = ft_strdup(buff)))
+			return (-1);
+		result = check_new_line(str, line);
+		if (result != 0)
+			return (result);
 	}
-	if (ret == -1)
-		return (-1);
-	return (0);
+	return (ret);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -69,7 +67,7 @@ int				get_next_line(const int fd, char **line)
 	int				ret;
 
 	ret = 0;
-	if (fd < 0 || BUFF_SIZE <= 0)
+	if (fd < 0 || BUFF_SIZE <= 0 || !line || fd > 1024)
 		return (-1);
 	if (str[fd])
 	{
