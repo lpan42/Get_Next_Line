@@ -15,18 +15,18 @@
 	int main(int argc, char **argv)
 {
 	int fd;
-	int fd2;
+	//int fd2;
 	int ret;
-	int ret2;
+	//int ret2;
 	int nol;
-	int nol2;
+	//int nol2;
 	char *line;
-	char *line2;
+	//char *line2;
 
 
 	(void)argc;
 	nol = 0;
-	nol2= 0;
+	//nol2= 0;
 	fd = open(argv[1], O_RDONLY);
 		while ((ret = get_next_line(fd, &line)) > 0)
 		{
@@ -49,7 +49,6 @@
 			printf("-----------Error\n");
 		else if (ret2 == 0)
 			printf("-----------End of file\n");
-		close(fd2);
-		*/
+		close(fd2);*/
 	return (0);
 }

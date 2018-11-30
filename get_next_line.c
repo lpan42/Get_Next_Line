@@ -57,7 +57,9 @@ static int		read_file(const int fd, char *buff, char **str, char **line)
 		if (check_new_line(str, line))
 			return (1);
 	}
-	return (ret);
+	if (ret == -1)
+		return (-1);
+	return (0);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -75,7 +77,7 @@ int				get_next_line(const int fd, char **line)
 			return (1);
 	}
 	ret = read_file(fd, buff, &str[fd], line);
-	if (ret != 0 || str[fd] == NULL || str[fd][0] == '\0')
+	if (ret != 0 || !str[fd] || str[fd][0] == '\0')
 		return (ret);
 	if (ret == 0 && str[fd])
 	{
